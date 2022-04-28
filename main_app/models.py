@@ -1,12 +1,30 @@
 from django.db import models
 from django.urls import reverse
+from datetime import date
 
 # Create your models here.
+
+
+class Toy(models.Model):
+    name = models.CharField(max_length=50)
+    color = models.CharField(max_length=20)
+
+
+    def __str__(self):
+        return self.name
+
+
+    def get_absolute_url(self):
+        return reverse('toys_detail', kwargs={'pk': self.id})
+
+
+
 class Bird(models.Model):
     name = models.CharField(max_length=100)
     specie = models.CharField(max_length=100)
     description = models.CharField(max_length=250)
     age = models.IntegerField()
+    toys = models.ManyToManyField(Toy)
 
 
     def __str__(self):
@@ -32,7 +50,7 @@ class Feeding(models.Model):
         default=MEALS[0][0]
         )
 
-    cat = models.ForeignKey(Bird, on_delete=models.CASCADE)
+    bird = models.ForeignKey(Bird, on_delete=models.CASCADE)
 
 
     def __str__(self):
